@@ -1,0 +1,9 @@
+# Image related things
+data/
+**/*.jpg
+**/*.png
+
+# Pytorch related things
+**/*.pt
+
+notebooks/garbage.ipynb
