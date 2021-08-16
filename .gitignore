@@ -6,4 +6,10 @@ data/
 # Pytorch related things
 **/*.pt
 
+# Python related things
+**/__pycache__
+**/*.pyc
+
+
+.vscode
 notebooks/garbage.ipynb

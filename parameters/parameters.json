@@ -1,0 +1,4 @@
+{
+    "dataset_path": "data/17flowers",
+    "model_name": "resnet18"
+}
