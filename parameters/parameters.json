@@ -1,4 +1,36 @@
 {
     "dataset_path": "data/17flowers",
-    "model_name": "resnet18"
+    "model_name": "resnet18",
+    "batch_size": 32,
+    "num_workers": 8,
+    "training_transforms": {
+        "RandomAffine": {
+            "degrees": 10,
+            "translate": [
+                0.1,
+                0.1
+            ],
+            "scale": [
+                0.80,
+                1.20
+            ],
+            "fillcolor": 255
+        },
+        "Resize": {
+            "size": [
+                224,
+                224
+            ]
+        },
+        "ToTensor": {}
+    },
+    "validation_transforms": {
+        "Resize": {
+            "size": [
+                224,
+                224
+            ]
+        },
+        "ToTensor": {}
+    }
 }
