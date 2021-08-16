@@ -4,7 +4,7 @@ from tqdm import tqdm
 
 class Trainer():
     def __init__(self, model = None, optimizer = None, scheduler = None, loss_function = None,
-                trainloader = None, testloader = None, log_interval= 1000, 
+                trainloader = None, valloader = None, log_interval= 1000, 
                 start_epoch = 0, last_epoch = 10, device = 'cpu', model_name='model'):
 
         # Config dictionnary
@@ -13,13 +13,13 @@ class Trainer():
         self.scheduler_config = scheduler
 
         # Pytorch items
-        self.model = None
-        self.optimizer = None
-        self.scheduler = None
+        self.model = model.to(device)
+        self.optimizer = optimizer
+        self.scheduler = scheduler
 
         # To be changed.
         self.train_loader = trainloader
-        self.test_loader = testloader
+        self.val_loader = valloader
         self.loss_function = loss_function
         self.log_interval = log_interval
         self.epoch = start_epoch
@@ -43,7 +43,6 @@ class Trainer():
             self.optimizer.zero_grad()
             results = self.model(data)
 
-            print(results)
             loss = self.loss_function(results, target)
             loss.backward()
             train_loss += loss.item()
@@ -55,10 +54,10 @@ class Trainer():
             train_acc += c
 
             self.optimizer.step()
-            if batch_idx % self.log_interval == (self.log_interval-1):    # print every 2000 mini-batches
+            if batch_idx % self.log_interval == (self.log_interval-1):   
                 print(f'[Epoch: {self.epoch}, batch: {batch_idx}/{len(self.train_loader)} ]\
                     Loss: {running_loss/self.log_interval}\t \
-                    Accuracy: {100*running_acc/(len(data)*self.log_interval)}')
+                    Accuracy: {100*running_acc/(self.train_loader.batch_size*self.log_interval)}')
 
                 running_loss = 0.0
                 running_acc = 0.0
@@ -71,7 +70,7 @@ class Trainer():
         test_loss = 0.0
         test_acc = 0.0
         with torch.no_grad():
-            for batch_idx, (data, target) in tqdm(enumerate(self.test_loader)):
+            for batch_idx, (data, target) in tqdm(enumerate(self.val_loader)):
                 data = data.to(self.device)
                 target = target.to(self.device)
                 results = self.model(data)
@@ -82,8 +81,8 @@ class Trainer():
                 test_acc += c
                     
 
-        test_loss /= len(self.test_loader)
-        test_acc = 100 * test_acc / len(self.test_loader.dataset)
+        test_loss /= len(self.val_loader)
+        test_acc = 100 * test_acc / len(self.val_loader.dataset)
         return test_loss, test_acc
 
 

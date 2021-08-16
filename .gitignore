@@ -13,3 +13,5 @@ data/
 
 .vscode
 notebooks/garbage.ipynb
+resnet18
+runs/*

@@ -1,14 +1,19 @@
 import json
 import argparse
+from sched import scheduler
+
+import torch
+from src.trainer.trainer import Trainer
 from unittest import main
 
 from torchvision.datasets import ImageFolder
-from torch.utils.data import Dataloader
+from torch.utils.data import DataLoader
 
 from src.losses.get_loss import get_loss
 from src.models.get_model import get_model
-#from src.optimizers.get_optimizer import get_optimizer
+from src.optimizers.get_optimizer import get_optimizer
 from src.transforms.get_transforms import get_transforms
+from src.schedulers.get_scheduler import get_scheduler
 
 parser = argparse.ArgumentParser(description='Train a model using a parameter file')
 parser.add_argument('parameters', metavar='p', type=str,
@@ -52,5 +57,44 @@ if __name__ == '__main__':
         pin_memory=True
         )
 
-    print(parameters)
+    # Load the model
+    model = get_model(
+        model_name = parameters['model_name'],
+        pretrained = parameters['pretrained'],
+        n_class = len(val_data.classes)
+    )
+
+    # Load the optimizer and loss function
+    optimizer = get_optimizer(
+        optimizer_name=parameters['optimizer_name'],
+        optimizer_parameters=parameters['optimizer_parameters'],
+        model = model
+    )
+
+    loss = get_loss(loss_name=parameters['loss_name'])
+
+    scheduler = get_scheduler(
+        scheduler_name=parameters['scheduler_name'],
+        scheduler_parameters=parameters['scheduler_parameters'], 
+        optimizer = optimizer
+    )
+
+    device = 'cuda' if torch.cuda.is_available() else 'cpu'
+
+    trainer = Trainer(
+        model = model,
+        optimizer = optimizer, 
+        scheduler= scheduler,
+        loss_function= loss,
+        trainloader = train_loader,
+        valloader = val_loader,
+        log_interval= int(len(train_loader)*0.2),
+        start_epoch=0,
+        last_epoch=10,
+        device=device,
+        model_name=parameters['model_name']
+    )
+
+    trainer.run_training()
+
     

@@ -58,7 +58,12 @@ def get_model(model_name: str, pretrained: bool, n_class: int):
     model = all_models_dict[model_name](pretrained=pretrained)
 
     # Replace the last layer to match the number of class you have
-    in_features = model.classifier[-1].in_features
-    model.classifier[-1] = torch.nn.Linear(in_features=in_features, out_features=n_class)
+    # some model have a classifier section, other might just have a liner layer
+    try : 
+        in_features = model.classifier[-1].in_features
+        model.classifier[-1] = torch.nn.Linear(in_features=in_features, out_features=n_class)
+    except AttributeError:
+        in_features = model.fc.in_features
+        model.fc = torch.nn.Linear(in_features=in_features, out_features=n_class)
 
     return model
