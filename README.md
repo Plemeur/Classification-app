@@ -31,8 +31,10 @@ To add any missing function, models, sechduler etc...  One needs to write the me
 
 ## TODOs
 - [ ] Add a validation section 
-    - [ ] Give sample of images that are wrongly classified
-    - [ ] Give metrics graphs 
+    - [x] Give sample of images that are wrongly classified (csv format)
+    - [ ] Give metrics graphs (Confusion matrix done, probably adding some bar graphs)
+    - [ ] Add grad cam or alike
+    - [ ] Add perturbation and see how results evolve (Gaussian Noise, Saturation, Compression artefact) 
 - [ ] Write comments
 - [ ] Add tests
 - [ ] Make a simple frontend
