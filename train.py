@@ -1,11 +1,7 @@
 import json
 import argparse
-from sched import scheduler
 
 import torch
-from src.trainer.trainer import Trainer
-from unittest import main
-
 from torchvision.datasets import ImageFolder
 from torch.utils.data import DataLoader
 
@@ -14,6 +10,8 @@ from src.models.get_model import get_model
 from src.optimizers.get_optimizer import get_optimizer
 from src.transforms.get_transforms import get_transforms
 from src.schedulers.get_scheduler import get_scheduler
+from src.trainer.trainer import Trainer
+from src.evaluator.evaluator import Evaluator 
 
 parser = argparse.ArgumentParser(description='Train a model using a parameter file')
 parser.add_argument('parameters', metavar='p', type=str,
@@ -88,13 +86,42 @@ if __name__ == '__main__':
         loss_function= loss,
         trainloader = train_loader,
         valloader = val_loader,
-        log_interval= int(len(train_loader)*0.2),
-        start_epoch=0,
-        last_epoch=10,
         device=device,
-        model_name=parameters['model_name']
+        parameters = parameters
     )
 
-    trainer.run_training()
+    #trainer.run_training()
 
-    
+    if parameters.get('evaluate', False):
+        try:
+            test_data = ImageFolder(
+                f"{parameters['dataset_path']}/test", 
+                transform = val_transform
+                )
+            assert len(test_data) > 0
+        except:
+            print("No test dataset, evaluating on validation dataset")
+            test_data = ImageFolder(
+                f"{parameters['dataset_path']}/val", 
+                transform = val_transform
+                )
+
+        test_loader = DataLoader(
+            test_data, 
+            shuffle = False,
+            batch_size=parameters['batch_size'],
+            num_workers=parameters['num_workers'],
+            pin_memory=True
+            )
+
+        evaluator = Evaluator(
+            model = model,
+            testloader = test_loader, 
+            device = device,
+            parameters=parameters,
+            writer = trainer.writer
+            )
+        
+        evaluator.run_evaluation()
+
+
