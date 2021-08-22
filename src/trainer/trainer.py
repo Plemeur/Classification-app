@@ -5,29 +5,23 @@ from tqdm import tqdm
 class Trainer():
     def __init__(self, model = None, optimizer = None, scheduler = None, loss_function = None,
                 trainloader = None, valloader = None, log_interval= 1000, 
-                start_epoch = 0, last_epoch = 10, device = 'cpu', model_name='model'):
-
-        # Config dictionnary
-        self.model_config = model
-        self.optimizer_config = optimizer
-        self.scheduler_config = scheduler
+                start_epoch = 0, last_epoch = 10, device = 'cpu', parameters=None):
 
         # Pytorch items
         self.model = model.to(device)
         self.optimizer = optimizer
         self.scheduler = scheduler
 
-        # To be changed.
         self.train_loader = trainloader
         self.val_loader = valloader
         self.loss_function = loss_function
-        self.log_interval = log_interval
-        self.epoch = start_epoch
-        self.last_epoch = last_epoch
+        self.log_interval = parameters.get('log_interval', len(self.train_loader)*0.2)
+        self.epoch = parameters.get('first_epoch', 0)
+        self.last_epoch = parameters.get('last_epoch', 10)
         self.best_accuracy = 0
-        self.model_name = model_name
 
-        self.writer = SummaryWriter()
+        self.saving_path = parameters.get('saving_path', parameters['model_name'])
+        self.writer = SummaryWriter(self.saving_path)
         self.device = device
 
     def train(self):
@@ -55,9 +49,9 @@ class Trainer():
 
             self.optimizer.step()
             if batch_idx % self.log_interval == (self.log_interval-1):   
-                print(f'[Epoch: {self.epoch}, batch: {batch_idx}/{len(self.train_loader)} ]\
-                    Loss: {running_loss/self.log_interval}\t \
-                    Accuracy: {100*running_acc/(self.train_loader.batch_size*self.log_interval)}')
+                print(f'[Epoch: {self.epoch}, batch: {batch_idx}/{len(self.train_loader)} ]\t'
+                      f'Loss: {running_loss/self.log_interval:.4f}\t'
+                      f'Accuracy: {100*running_acc/(self.train_loader.batch_size*self.log_interval):.4f}')
 
                 running_loss = 0.0
                 running_acc = 0.0
@@ -90,10 +84,9 @@ class Trainer():
         train_loss, train_acc = self.train()
         test_loss, test_acc= self.test()
 
-        print('====> Epoch: {} Average loss: {:.4f}'.format(
-            self.epoch, train_loss / len(self.train_loader)))
+        print(f'====> Epoch: {self.epoch} Average loss: {train_loss / len(self.train_loader):.4f}')
 
-        print('====> Test set loss: {:.4f}, \t Accuracy: {}'.format(test_loss, test_acc))
+        print(f'====> Test set loss: {test_loss:.4f}, \t Accuracy: {test_acc:.4f}')
 
         self.writer.add_scalar('Loss/train', train_loss, self.epoch)
         self.writer.add_scalar('Loss/test', test_loss, self.epoch)
@@ -101,7 +94,8 @@ class Trainer():
         self.writer.add_scalar('Accuracy/test', test_acc, self.epoch)
 
         if test_acc > self.best_accuracy :
-            torch.save(self.model.state_dict(), self.model_name)
+            torch.save(self.model.state_dict(), f'{self.saving_path}/model.pt')
+            self.best_accuracy = test_acc
         
         self.epoch += 1
 
@@ -112,4 +106,6 @@ class Trainer():
                 self.scheduler.step()
 
         while self.epoch != self.last_epoch:
-            self.train_one_epoch()    
+            self.train_one_epoch()
+
+        print(f'Finished Training, Best Accuracy : {self.best_accuracy:.3f}')

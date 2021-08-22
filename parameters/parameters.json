@@ -1,15 +1,19 @@
 {
-    "dataset_path": "data/17flowers",
+    "dataset_path": "../data/17flowers",
     "model_name": "resnet18",
+    "saving_path": "Da_model",
     "pretrained": true,
-    "loss_name":"categorical_crossentropy",
+    "evaluate": true,
+    "loss_name": "focal_loss",
     "optimizer_name": "Adam",
     "optimizer_parameters": {},
     "scheduler_name": "StepLR",
     "scheduler_parameters": {
-        "step_size" : 10,
-        "gamma" : 0.1
+        "step_size": 10,
+        "gamma": 0.1
     },
+    "first_epoch": 0,
+    "last_epoch": 1,
     "batch_size": 32,
     "num_workers": 8,
     "training_transforms": {
@@ -41,5 +45,6 @@
             ]
         },
         "ToTensor": {}
-    }
+    },
+    "test_perturbation": {}
 }
