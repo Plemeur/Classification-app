@@ -19,10 +19,7 @@ parser.add_argument('parameters', metavar='p', type=str,
 args = parser.parse_args()
 
 
-if __name__ == '__main__':
-    # Read the parameter file.
-    with open(args.parameters, 'r') as f:
-        parameters = json.load(f)
+def train(parameters:dict):
 
     # Create the transform items
     train_transform, val_transform = get_transforms(
@@ -125,3 +122,9 @@ if __name__ == '__main__':
         evaluator.run_evaluation()
 
 
+if __name__=='__main__':
+    # Read the parameter file.
+    with open(args.parameters, 'r') as f:
+        parameters = json.load(f)
+
+    train(parameters)

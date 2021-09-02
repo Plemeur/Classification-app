@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container">
+    <form action="/training" method="post">
+        <h2>Launch a New training</h2>
+
+        <h3>Dataset Path</h3>
+        <div class="section">
+            <input type="text" name="dataset_path" id="datasetPath" class='text-input'>
+        </div>
+
+        <h3>Model parameters</h3>
+        <div class="section">
+            <h4>Model</h4>
+            <select name="model_name" id="modelSelector" class="selector">
+                {% for model in models %}
+                    <option value="{{model}}">{{model}}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="section">
+            <h4>Pretrained</h4>
+            <input type="checkbox" name="pretrained" id="pretrainedCheckbox">
+        </div>
+        <div class="section">
+            <h4>Evaluate</h4>
+            <input type="checkbox" name="evaluate" id="evaluateCheckbox">
+        </div>
+
+        <h3>Training parameters</h3>
+        <div class="section">
+            <h4>Loss Function</h4> 
+            <select name="loss_name" id="lossSelector" class="selector">
+                {% for loss in losses %}
+                    <option value="{{loss}}">{{loss}}</option>
+                    <i class="fas fa-times 2x"></i>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="section">
+            <h4>Optimizer</h4>
+            <select name="optimizer_name" id="optimizerSelector" class="selector">
+                {% for optim in optimizers %}
+                    <option value="{{optim}}">{{optim}}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="section">
+            <h4>Scheduler</h4>
+            <select name="scheduler_name" id="schedulerSelector" class="selector">
+                {% for scheduler in schedulers %}
+                    <option value="{{scheduler}}">{{scheduler}}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="section">
+            <h4>First Epoch</h4>
+            <input type="text" name="first_epoch" class='text-input' value=0>
+        </div>
+        <div class="section">
+            <h4>Last Epoch</h4>
+            <input type="text" name="last_epoch" class='text-input' value=10>
+        </div>
+        <div class="section">
+            <h4>Batch Size</h4>
+            <input type="text" name="batch_size" class='text-input' value=32>
+        </div>
+        <div class="section">
+            <h4>Thread count</h4>
+            <input type="text" name="num_workers" class='text-input' value=8>
+        </div>
+
+        <h3>Transforms</h3>
+        <div class="transforms">
+            <div class="section">
+                <select name="transformSelector1" id="transformSelector" class="selector">
+                    {% for transform in transforms %}
+                        <option value="{{transform}}">{{transform}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        <input type="submit" value="Start Training" id="submitButton">
+    </form>
+</div>
+
+
+{% endblock %}

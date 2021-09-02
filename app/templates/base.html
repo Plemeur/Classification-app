@@ -1,0 +1,31 @@
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <link href='http://fonts.googleapis.com/css?family=Roboto:400,300,700' rel='stylesheet' type='text/css'>
+        <link rel=stylesheet type=text/css href="{{ url_for('static', filename='styles.css') }}">
+        <title>Pytorch Classification</title>
+    </head>
+    <body>
+        
+        <header id="myHeader">
+            <div class="container">
+                <h1>Pytorch Classification</h1>
+                <nav id="myNavbar">
+                    <ul>
+                        <li><a href="#">Home</a></li>
+                        <li><a href="#">Training</a></li>
+                        <li><a href="#">Deployment</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </header>
+        {% block content %}
+        {% endblock %}
+        
+        <script src="{{ url_for('static', filename='javascript/test.js') }}"></script>
+    </body>
+</html>

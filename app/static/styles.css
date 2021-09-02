@@ -1,0 +1,96 @@
+:root {
+  --primary-color: #3c3c37;
+  --primary-accent: #df5821;
+  --tertiary-color: #f8f6e8;
+  --light-color: #acacac;
+  --light-accent: #fa8c07;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+ul {
+  list-style-type: none;
+}
+
+a {
+  text-decoration: none;
+  color: var(--tertiary-color);
+}
+
+header {
+  background-color: var(--primary-color);
+  width: 100%;
+  height: 70px;
+  color: var(--primary-accent);
+  display: flex;
+}
+
+.container {
+  max-width: 80%;
+  padding-left: 10%;
+  justify-self: center;
+  display: flex;
+  align-items: center;
+}
+
+header ul {
+  display: flex;
+  margin-left: 60px;
+}
+
+header li {
+  padding-top: 10px;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+.container h2 {
+  padding: 10px 0px;
+}
+
+.container h3 {
+  text-decoration: underline;
+  padding: 10px 0px;
+}
+
+.section {
+  display: flex;
+  flex-direction: row;
+}
+
+.section h4 {
+  flex: 0 0 100px;
+  margin: 10px 10px 0 0;
+}
+
+.section input {
+  margin: 10px 10px 0 0;
+}
+
+.section select {
+  margin: 10px 10px 0 0;
+  max-height: 20px;
+}
+
+.parameters {
+  display: flex;
+  flex-direction: column;
+}
+
+.parameter {
+  display: flex;
+}
+
+.parameter h5 {
+  color: #3c3c37;
+  flex: 0 0 100px;
+  margin: 10px 10px 0 0;
+}
+
+.transforms {
+  display: flex;
+  flex-direction: row;
+}

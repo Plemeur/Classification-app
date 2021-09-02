@@ -1,0 +1,11 @@
+
+{% if params %}
+{% for param, default in zip(params, defaults) %}
+    {% if param not in ["self", "params", "optimizer"] %}
+    <div class="parameter">
+        <h5>{{param}}</h5>
+        <input type="text" name="{{param}}" id="{{param}}" class='text-input' value = {{default}} >
+    </div>
+    {% endif %}
+{% endfor %}
+{% endif %}
