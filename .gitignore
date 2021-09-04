@@ -2,6 +2,7 @@
 data/
 **/*.jpg
 **/*.png
+!readme_files/*.png
 
 # Pytorch related things
 **/*.pt
