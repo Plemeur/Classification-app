@@ -45,7 +45,7 @@ python run.py
 
 then head to the port `8000` of your machine and you should find this UI
 
-![app_ui](../app_screenshot.png)
+![app_ui](readme_files/app_screenshot.png)
 
 ## TODOs
 
