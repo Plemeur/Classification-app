@@ -13,6 +13,8 @@ from src.models.get_model import all_models_dict
 from src.optimizers.get_optimizer import all_optim_dict
 from src.transforms.get_transforms import all_transforms_dict
 from src.schedulers.get_scheduler import all_scheduler_dict
+from app.utils.parameters import parse_parameters
+from train import train
 
 SUCCESS_RESPONSE = json.dumps({'success':True}), 200, {'ContentType':'application/json'} 
 
@@ -32,17 +34,20 @@ def home():
 
 @app.route('/parameters')
 def get_transforms():
-    if request.args['type'] == 'transform':  
+    section = request.args['type'] 
+    if section == 'transform':  
         func = all_transforms_dict[request.args['choice_name']]
-    elif request.args['type'] == 'optimizer':
+        section = request.args['section']
+    elif section == 'optimizer':
         func = all_optim_dict[request.args['choice_name']]
-    elif request.args['type'] == 'loss':
+    elif section == 'loss':
         func = all_losses_dict[request.args['choice_name']]
-    elif request.args['type'] == 'scheduler':
+    elif section == 'scheduler':
         func = all_scheduler_dict[request.args['choice_name']]
 
     try : 
         params = func.__init__.__code__.co_varnames
+        params = params[:func.__init__.__code__.co_argcount]
         defaults = list(func.__init__.__defaults__)
         # Default arguments are always at the end of the function
         while len(defaults)<len(params):
@@ -53,15 +58,18 @@ def get_transforms():
 
     # Looks like HTML does not like spaces
     defaults = list(map(lambda x: f'{x}'.replace(' ',''), defaults))
-
+    print(params)
     return render_template('parameters.html',
         params = params, 
-        defaults=defaults)
+        defaults=defaults, 
+        section=section)
 
 @app.route('/training', methods=['post'])
 def training():
-    print(request.data)
-
+    parameters = parse_parameters(request.data)
+    print(parameters)
+    train(parameters)
+    
     return SUCCESS_RESPONSE
 
 if __name__ == '__main__':

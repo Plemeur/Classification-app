@@ -13,12 +13,6 @@ from src.schedulers.get_scheduler import get_scheduler
 from src.trainer.trainer import Trainer
 from src.evaluator.evaluator import Evaluator 
 
-parser = argparse.ArgumentParser(description='Train a model using a parameter file')
-parser.add_argument('parameters', metavar='p', type=str,
-                    help='Path to the parameter file')
-args = parser.parse_args()
-
-
 def train(parameters:dict):
 
     # Create the transform items
@@ -87,7 +81,7 @@ def train(parameters:dict):
         parameters = parameters
     )
 
-    #trainer.run_training()
+    trainer.run_training()
 
     if parameters.get('evaluate', False):
         try:
@@ -123,6 +117,11 @@ def train(parameters:dict):
 
 
 if __name__=='__main__':
+    parser = argparse.ArgumentParser(description='Train a model using a parameter file')
+    parser.add_argument('parameters', metavar='p', type=str,
+                        help='Path to the parameter file')
+    args = parser.parse_args()
+
     # Read the parameter file.
     with open(args.parameters, 'r') as f:
         parameters = json.load(f)

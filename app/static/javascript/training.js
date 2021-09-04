@@ -1,4 +1,5 @@
 const transformSelector = document.getElementById('transformSelector');
+const valTransformSelector = document.getElementById('valTransformSelector');
 const submitButton = document.getElementById('submitButton');
 const inputs = document.getElementsByTagName('input');
 const lossSelector = document.getElementById('lossSelector');
@@ -7,34 +8,42 @@ const schedulerSelector = document.getElementById('schedulerSelector');
 
 // Rewrite this to match the style of the other one
 function displayTransformParameters(e) {
-    const transformParameters = document.createElement('div');
-    const count = parseInt(e.target.name.substring(17));
-    const transform = e.target.value;
-    const transformSection = e.target.parentElement;
+    const transformSection = e.target.parentElement.parentElement;
+    const transformSubSection = e.target.parentElement;
+    const count = parseInt(e.target.name.match(/\d+/));
+    const newName = e.target.name.replace(count, count+1);
+    const parametersId = e.target.name.replace(count, `Parameters${count}`)
+    console.log(e.target.name)
 
+    const transformParameters = document.createElement('div');
     transformParameters.classList.add('parameters');
-    transformParameters.id = `transformParameters${count}`    
-    
-    fetch(`parameters?type=transform&choice_name=${transform}`)
+    transformParameters.id = parametersId
+
+    const transform = e.target.value;    
+    fetch(`parameters?type=transform&choice_name=${transform}&section=${e.target.name}`)
     .then(response => {
         return response.text();
     })
     .then(string => {
-        let newSelector = transformSelector.cloneNode(true);
-        const newName = `transformSelector${count+1}`;
-
         if (document.querySelector(`[name  = ${newName}]`) == null) {
+            let newSubSection = transformSubSection.cloneNode(false);
+            let newSelector = transformSelector.cloneNode(true);
+
             newSelector.addEventListener('change', displayTransformParameters);
             newSelector.name = newName;
+
             transformParameters.innerHTML = string;
-            transformSection.appendChild(transformParameters);
-            transformSection.appendChild(newSelector);
+            transformSubSection.appendChild(transformParameters);
+            
+            newSubSection.appendChild(newSelector);
+            transformSection.appendChild(newSubSection);
+            console.log(transformParameters.childNodes);
         } else {
-            currentParameters = document.getElementById(`transformParameters${count}`);
-            console.log(currentParameters);
+            currentParameters = document.getElementById(parametersId);
             currentParameters.innerHTML = string;
         }        
-    })    
+    })
+    
 }
 
 function displayParameters(e) {
@@ -87,6 +96,7 @@ function makeBoolean(e) {
 
 // Display Parameter on selection
 transformSelector.addEventListener('change', displayTransformParameters);
+valTransformSelector.addEventListener('change', displayTransformParameters);
 lossSelector.addEventListener('change', displayParameters);
 optimizerSelector.addEventListener('change', displayParameters);
 schedulerSelector.addEventListener('change', displayParameters);

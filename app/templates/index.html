@@ -71,19 +71,31 @@
             <input type="text" name="num_workers" class='text-input' value=8>
         </div>
 
-        <h3>Transforms</h3>
+        <h3>Training Transforms</h3>
         <div class="transforms">
             <div class="section">
-                <select name="transformSelector1" id="transformSelector" class="selector">
+                <select name="transform0" id="transformSelector" class="selector">
+                    <option value=None>Select a transform</option>
                     {% for transform in transforms %}
                         <option value="{{transform}}">{{transform}}</option>
                     {% endfor %}
                 </select>
             </div>
         </div>
+
+        <h3>Validation Transforms</h3>
+        <div class="transforms">
+            <div class="section">
+                <select name="val_transform0" id="valTransformSelector" class="selector">
+                    <option value=None>Select a transform</option>
+                    {% for transform in transforms %}
+                        <option value="{{transform}}">{{transform}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+
         <input type="submit" value="Start Training" id="submitButton">
     </form>
 </div>
-
-
 {% endblock %}

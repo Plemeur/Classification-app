@@ -6,7 +6,7 @@ from torch.autograd import Variable
 
 class FocalLoss(nn.Module):
     # From https://github.com/clcarwin/focal_loss_pytorch
-    def __init__(self, gamma=0, alpha=None, size_average=True):
+    def __init__(self, gamma=0, alpha=0.2, size_average=True):
         super(FocalLoss, self).__init__()
         self.gamma = gamma
         self.alpha = alpha
