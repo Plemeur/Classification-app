@@ -71,15 +71,26 @@ function displayParameters(e) {
 
 function postForm(e) {
     e.preventDefault()
-    const data = new FormData(e.target.parentElement);
+    const data = new FormData(e.target.parentElement.parentElement);
     const values = Object.fromEntries(data.entries());
-    
-    fetch( '/training', {
+    const resultSection = submitButton.parentElement;
+    let resultMessage = document.getElementById('resultMessage');
+
+    fetch( '/register_training', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify(values)
+    })
+    .then(response => {
+        if (!response.ok){
+            resultMessage.classList.add('Error');
+            resultMessage.innerHTML = "Error while parsing parameters";
+        } else {
+            resultMessage.classList.add('Success');
+            resultMessage.innerHTML = "Training Queued";
+        }
     })
 }
 

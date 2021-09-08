@@ -1,0 +1,1 @@
+docker run -it --mount type=bind,source="$(pwd)",target=/usr/src/app --mount type=bind,source="$(pwd)"/../data,target=/usr/src/data  classification_app

@@ -60,7 +60,8 @@ def train(parameters:dict):
         model = model
     )
 
-    loss = get_loss(loss_name=parameters['loss_name'])
+    loss = get_loss(loss_name=parameters['loss_name'],
+                    loss_parameters=parameters['loss_parameters'])
 
     scheduler = get_scheduler(
         scheduler_name=parameters['scheduler_name'],

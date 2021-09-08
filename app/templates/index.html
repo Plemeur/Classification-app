@@ -21,11 +21,11 @@
         </div>
         <div class="section">
             <h4>Pretrained</h4>
-            <input type="checkbox" name="pretrained" id="pretrainedCheckbox">
+            <input type="checkbox" name="pretrained" id="pretrainedCheckbox" value=false>
         </div>
         <div class="section">
             <h4>Evaluate</h4>
-            <input type="checkbox" name="evaluate" id="evaluateCheckbox">
+            <input type="checkbox" name="evaluate" id="evaluateCheckbox" value=false>
         </div>
 
         <h3>Training parameters</h3>
@@ -94,8 +94,10 @@
                 </select>
             </div>
         </div>
-
-        <input type="submit" value="Start Training" id="submitButton">
+        <div class="section">
+            <input type="submit" value="Start Training" id="submitButton">
+            <div id="resultMessage"></div>
+        </div>
     </form>
 </div>
 {% endblock %}

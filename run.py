@@ -13,10 +13,12 @@ from src.models.get_model import all_models_dict
 from src.optimizers.get_optimizer import all_optim_dict
 from src.transforms.get_transforms import all_transforms_dict
 from src.schedulers.get_scheduler import all_scheduler_dict
-from app.utils.parameters import parse_parameters
+from app.utils.parameters import parse_parameters, validate_parameters
 from train import train
 
 SUCCESS_RESPONSE = json.dumps({'success':True}), 200, {'ContentType':'application/json'} 
+def bad_request_response(items):
+    return json.dumps({'success':False, 'cause':items}), 400, {'ContentType':'application/json'}
 
 app = Flask(__name__, template_folder='app/templates', static_folder='app/static')
 app.jinja_env.globals.update(zip=zip) # Allows Jinja to uses the python zip function
@@ -58,19 +60,27 @@ def get_transforms():
 
     # Looks like HTML does not like spaces
     defaults = list(map(lambda x: f'{x}'.replace(' ',''), defaults))
-    print(params)
     return render_template('parameters.html',
         params = params, 
         defaults=defaults, 
         section=section)
 
-@app.route('/training', methods=['post'])
-def training():
+@app.route('/register_training', methods=['post'])
+def register_training():
     parameters = parse_parameters(request.data)
-    print(parameters)
-    train(parameters)
-    
+    errors = validate_parameters(parameters)
+
+    if errors:
+        return bad_request_response(errors)
+
+    #train(parameters)
     return SUCCESS_RESPONSE
+
+
+@app.route('/training')
+def training():
+    return render_template('training.html')
+
 
 if __name__ == '__main__':
     app.secret_key = 'super_secret_key'

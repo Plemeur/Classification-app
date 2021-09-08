@@ -16,6 +16,6 @@ try:
 except:
     all_losses_dict = {**torch_losses_dict, **custom_losses_dict}
 
-def get_loss(loss_name:str):
+def get_loss(loss_name:str, loss_parameters:dict):
     assert (loss_name in all_losses_dict)
-    return all_losses_dict[loss_name]()
+    return all_losses_dict[loss_name](**loss_parameters)

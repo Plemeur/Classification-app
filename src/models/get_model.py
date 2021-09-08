@@ -1,5 +1,6 @@
 from torchvision import models
 import torch
+from .custom import *
 
 # Models included with torchvision
 torchvision_models_dict = {
@@ -43,7 +44,11 @@ torchvision_models_dict = {
     }
 
 # Custom models written
-custom_models_dict = {}
+custom_models_dict = {
+    'fpnClassifier' : fpnClassifier,
+    'sketchnet': SketchNet,
+    'sketchnet2' : SketchNet2
+}
 
 try: 
     all_models_dict = torchvision_models_dict | custom_models_dict

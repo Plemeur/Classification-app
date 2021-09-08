@@ -49,6 +49,7 @@ then head to the port `8000` of your machine and you should find this UI
 
 ## TODOs
 
+- [ ] Find a good way to get weight using path of previous training
 - [ ] Add a validation section
   - [x] Give sample of images that are wrongly classified (csv format)
   - [ ] Give metrics graphs (Confusion matrix done, probably adding some bar graphs)

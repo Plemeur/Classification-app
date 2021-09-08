@@ -138,3 +138,9 @@ input[type="submit"] {
   border-radius: 20px;
   border: none;
 }
+
+#resultMessage {
+  font-size: 1.5em;
+  padding: 10px 30px;
+  margin: 20px 0;
+}
